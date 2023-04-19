@@ -10,4 +10,7 @@ export class WorkoutDto {
 
   @IsNumber()
   duration: number;
+
+  @IsString()
+  category?: string;
 }
