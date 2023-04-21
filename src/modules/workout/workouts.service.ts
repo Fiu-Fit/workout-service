@@ -1,16 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, Model } from 'mongoose';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 import { WorkoutDto } from './dto/workout.dto';
 import { Workout } from './schemas/workout.schema';
 
 @Injectable()
 export class WorkoutsService {
   constructor(
-    @InjectModel('WORKOUT_MODEL')
-    private workoutModel: Model<Workout>,
-    @InjectConnection('workouts')
-    private connection: Connection
+    @InjectModel(Workout.name)
+    private workoutModel: Model<Workout>
   ) {}
 
   createWorkout(createWorkoutDto: WorkoutDto): Promise<Workout> {
@@ -35,13 +33,10 @@ export class WorkoutsService {
     return deletedWorkout;
   }
 
-  async updateWorkout(
-    id: string,
-    updateWorkoutDto: WorkoutDto
-  ): Promise<Workout> {
+  async updateWorkout(id: string, updateWorkout: WorkoutDto): Promise<Workout> {
     const updatedProduct = (await this.workoutModel.findByIdAndUpdate(
       id,
-      updateWorkoutDto
+      updateWorkout
     )) as Workout;
     return updatedProduct;
   }
