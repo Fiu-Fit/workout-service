@@ -1,23 +1,27 @@
 version: '3.8'
 services:
   dev-db:
-    image: postgres
+    image: mongo:latest
+    container_name: mongodb
+    restart: unless-stopped
     ports:
-      - 5434:5432
+      - 27017:27017
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: fiu-fit-users
+      MONGO_INITDB_ROOT_USERNAME: fiu-fit-user
+      MONGO_INITDB_ROOT_PASSWORD: TAxy57EnI16b38aN
+      MONGO_INITDB_DATABASE: workout-service-db
     networks:
       - fiu-fit
+
   test-db:
-    image: postgres
+    image: mongo:latest
+    container_name: mongodb
+    restart: unless-stopped
     ports:
-      - 5435:5432
+      - 27017:27017
     environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: fiu-fit-users-test
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: password
     networks:
       - fiu-fit
 networks:

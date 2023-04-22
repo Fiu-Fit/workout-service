@@ -1,7 +1,13 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ExerciseModule } from './modules/exercise/exercise.module';
 
 @Module({
-  imports: [MongooseModule.forRoot(process.env.MONGODB_URL || '')],
+  imports: [
+    ExerciseModule,
+    ConfigModule.forRoot(),
+    MongooseModule.forRoot(process.env.MONGODB_URL || ''),
+  ],
 })
 export class AppModule {}
