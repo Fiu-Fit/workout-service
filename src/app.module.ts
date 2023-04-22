@@ -7,7 +7,7 @@ import { ExerciseModule } from './modules/exercise/exercise.module';
   imports: [
     ExerciseModule,
     ConfigModule.forRoot(),
-    MongooseModule.forRoot(process.env.MONGODB_URL || ''),
+    MongooseModule.forRoot(process.env.MONGODB_URI || ''),
   ],
 })
 export class AppModule {}
