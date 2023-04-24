@@ -12,8 +12,8 @@ export interface ExerciseId {
 export interface Exercise extends Document {
   id: number;
   name: string;
-  description?: string;
-  category?: string;
+  description: string;
+  category: string;
 }
 
 export interface Empty {}
