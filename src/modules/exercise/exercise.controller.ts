@@ -2,20 +2,20 @@ import { Body, Controller, Param } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { ExerciseDTO } from './dto/exercise.dto';
 import { ExerciseService } from './exercise.service';
-import { EXERCISE_SERVICE_NAME } from './interfaces/exercise.pb';
+import { EXERCISE_SERVICE_NAME, ExerciseList } from './interfaces/exercise.pb';
 
 @Controller('exercises')
 export class ExerciseController {
   constructor(private exerciseService: ExerciseService) {}
 
   @GrpcMethod(EXERCISE_SERVICE_NAME, 'create')
-  createPost(@Body() exerciseDTO: ExerciseDTO): Promise<ExerciseDTO> {
+  createExercise(@Body() exerciseDTO: ExerciseDTO): Promise<ExerciseDTO> {
+    console.log(exerciseDTO);
     return this.exerciseService.createExercise(exerciseDTO);
   }
 
   @GrpcMethod(EXERCISE_SERVICE_NAME, 'findAll')
-  getExercises(): Promise<ExerciseDTO[]> {
-    console.log('HOLA DESDE WS FIND ALL');
+  getExercises(): Promise<ExerciseList> {
     return this.exerciseService.getExercises();
   }
 

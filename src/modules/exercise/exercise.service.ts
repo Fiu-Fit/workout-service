@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ExerciseDTO } from './dto/exercise.dto';
+import { ExerciseList } from './interfaces/exercise.pb';
 import { Exercise } from './schemas/exercise.schema';
 
 @Injectable()
@@ -15,9 +16,9 @@ export class ExerciseService {
     return exercise.save();
   }
 
-  async getExercises(): Promise<Exercise[]> {
+  async getExercises(): Promise<ExerciseList> {
     const exercises = await this.exerciseModel.find();
-    return exercises;
+    return { exercises };
   }
 
   async getExercise(exerciseID: string): Promise<Exercise> {

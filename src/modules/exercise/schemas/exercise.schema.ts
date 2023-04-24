@@ -8,7 +8,7 @@ export class Exercise {
   @Prop()
   id: number;
 
-  @Prop({ required: true })
+  @Prop()
   name: string;
 
   @Prop()
