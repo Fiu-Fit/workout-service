@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Param } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { ExerciseDTO } from './dto/exercise.dto';
 import { ExerciseService } from './exercise.service';
@@ -15,15 +15,16 @@ export class ExerciseController {
 
   @GrpcMethod(EXERCISE_SERVICE_NAME, 'findAll')
   getExercises(): Promise<ExerciseDTO[]> {
+    console.log('HOLA DESDE WS FIND ALL');
     return this.exerciseService.getExercises();
   }
 
-  @Get('/:exerciseID')
+  @GrpcMethod(EXERCISE_SERVICE_NAME, 'findById')
   getExercise(@Param('exerciseID') exerciseID: string): Promise<ExerciseDTO> {
     return this.exerciseService.getExercise(exerciseID);
   }
 
-  @Post('/:exerciseID')
+  @GrpcMethod(EXERCISE_SERVICE_NAME, 'put')
   updateExercise(
     @Param('exerciseID') exerciseID: string,
     @Body() exerciseDTO: ExerciseDTO
@@ -31,7 +32,7 @@ export class ExerciseController {
     return this.exerciseService.updateExercise(exerciseID, exerciseDTO);
   }
 
-  @Delete('/:exerciseID')
+  @GrpcMethod(EXERCISE_SERVICE_NAME, 'deleteById')
   deleteExercise(
     @Param('exerciseID') exerciseID: string
   ): Promise<ExerciseDTO> {

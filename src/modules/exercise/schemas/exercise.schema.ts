@@ -5,6 +5,9 @@ export type ExerciseDocument = HydratedDocument<Exercise>;
 
 @Schema()
 export class Exercise {
+  @Prop()
+  id: number;
+
   @Prop({ required: true })
   name: string;
 
