@@ -34,7 +34,7 @@ export interface ExerciseServiceClient {
   deleteById(request: ExerciseId): Observable<Exercise>;
 }
 
-export interface UserServiceController {
+export interface ExerciseServiceController {
   create(
     request: Exercise
   ): Promise<Exercise> | Observable<Exercise> | Exercise;
