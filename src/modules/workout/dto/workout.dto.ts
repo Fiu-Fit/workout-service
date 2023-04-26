@@ -13,4 +13,10 @@ export class WorkoutDto {
 
   @IsString()
   category?: string;
+
+  @IsNumber()
+  athleteIds: number[];
+
+  @IsNumber()
+  authorId: number;
 }

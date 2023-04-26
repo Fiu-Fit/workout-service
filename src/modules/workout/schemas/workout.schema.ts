@@ -9,10 +9,10 @@ export class Workout {
   name: string;
 
   @Prop()
-  description: string;
+  duration: number;
 
   @Prop()
-  duration: number;
+  description: string;
 
   @Prop()
   category: string;

@@ -12,6 +12,7 @@ export interface Workout {
   id: number;
   name: string;
   duration: number;
+  description: string;
   category: string;
   athleteIds: number[];
   authorId: number;

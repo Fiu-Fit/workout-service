@@ -1,23 +1,21 @@
-import { Body, Controller, NotFoundException } from '@nestjs/common';
+import { Body, Controller, NotFoundException, Param } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { WorkoutDto } from './dto/workout.dto';
-import { WORKOUT_SERVICE_NAME } from './interfaces/workout.pb';
+import { WORKOUT_SERVICE_NAME, WorkoutList } from './interfaces/workout.pb';
 import { WorkoutsService } from './workouts.service';
 
 @Controller('workouts')
 export class WorkoutsController {
   constructor(private workoutsService: WorkoutsService) {}
 
-  @GrpcMethod(WORKOUT_SERVICE_NAME, 'freate')
-  async createWorkout(
-    @Body() createWorkoutDto: WorkoutDto
-  ): Promise<WorkoutDto> {
-    const workout = await this.workoutsService.createWorkout(createWorkoutDto);
+  @GrpcMethod(WORKOUT_SERVICE_NAME, 'create')
+  createWorkout(@Body() createWorkoutDto: WorkoutDto): Promise<WorkoutDto> {
+    const workout = this.workoutsService.createWorkout(createWorkoutDto);
     return workout;
   }
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'findAll')
-  getWorkouts(): Promise<WorkoutDto[]> {
+  getWorkouts(): Promise<WorkoutList> {
     return this.workoutsService.getWorkouts();
   }
 
@@ -26,7 +24,7 @@ export class WorkoutsController {
     return this.workoutsService.getWorkoutById(id);
   }
 
-  @GrpcMethod('WorkoutService', 'deleteById')
+  @GrpcMethod(WORKOUT_SERVICE_NAME, 'deleteById')
   deleteWorkout(id: string): Promise<WorkoutDto> {
     try {
       return this.workoutsService.deleteWorkout(id);
@@ -38,8 +36,11 @@ export class WorkoutsController {
     }
   }
 
-  @GrpcMethod('WorkoutService', 'updateWorkoutById')
-  updateWorkout(id: string, updateWorkoutDto: WorkoutDto): Promise<WorkoutDto> {
-    return this.workoutsService.updateWorkout(id, updateWorkoutDto);
+  @GrpcMethod(WORKOUT_SERVICE_NAME, 'updateWorkoutById')
+  updateWorkout(
+    @Param('workoutID') workoutID: string,
+    @Body() workoutDto: WorkoutDto
+  ): Promise<WorkoutDto> {
+    return this.workoutsService.updateWorkout(workoutID, workoutDto);
   }
 }
