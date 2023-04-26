@@ -5,7 +5,7 @@ export type ExerciseDocument = HydratedDocument<Exercise>;
 
 @Schema()
 export class Exercise {
-  @Prop()
+  @Prop({ required: true, unique: true })
   id: number;
 
   @Prop()

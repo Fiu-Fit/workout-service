@@ -2,7 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ExerciseDTO } from './dto/exercise.dto';
-import { ExerciseList } from './interfaces/exercise.pb';
+import { ExerciseId, ExerciseList } from './interfaces/exercise.pb';
 import { Exercise } from './schemas/exercise.schema';
 
 @Injectable()
@@ -21,8 +21,8 @@ export class ExerciseService {
     return { exercises };
   }
 
-  async getExercise(exerciseID: string): Promise<Exercise> {
-    const exercise = await this.exerciseModel.findById(exerciseID);
+  async getExercise(exerciseID: ExerciseId): Promise<Exercise> {
+    const exercise = await this.exerciseModel.findOne({ id: exerciseID.id });
     if (!exercise) {
       throw new NotFoundException('Exercise not found');
     }
@@ -30,11 +30,11 @@ export class ExerciseService {
   }
 
   async updateExercise(
-    exerciseID: string,
+    exerciseID: ExerciseId,
     exerciseDTO: ExerciseDTO
   ): Promise<Exercise> {
-    const updatedExercise = await this.exerciseModel.findByIdAndUpdate(
-      exerciseID,
+    const updatedExercise = await this.exerciseModel.findOneAndUpdate(
+      { id: exerciseID.id },
       exerciseDTO,
       { new: true }
     );
@@ -45,10 +45,10 @@ export class ExerciseService {
   }
 
   // Detele Exercise
-  async deleteExercise(exerciseID: string): Promise<Exercise> {
-    const deletedExercise = await this.exerciseModel.findByIdAndDelete(
-      exerciseID
-    );
+  async deleteExercise(exerciseID: ExerciseId): Promise<Exercise> {
+    const deletedExercise = await this.exerciseModel.findOneAndDelete({
+      id: exerciseID.id,
+    });
     if (!deletedExercise) {
       throw new NotFoundException('Exercise not found');
     }
