@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
+// import { Exercise } from 'src/modules/exercise/schemas/exercise.schema';
 import { HydratedDocument } from 'mongoose';
 
 export type WorkoutDocument = HydratedDocument<Workout>;
@@ -12,6 +13,9 @@ export class Workout {
   duration: number;
 
   @Prop()
+  difficulty: number;
+
+  @Prop()
   description: string;
 
   @Prop()
@@ -22,6 +26,15 @@ export class Workout {
 
   @Prop()
   authorId: number;
+
+  // @Prop()
+  // exercises: ExerciseInfo[];
 }
+
+// const ExcerciseInfo = new Schema({
+//   exercise: Exercise,
+//   repetitions?: Number,
+//   duration?: Number,
+// })
 
 export const WorkoutSchema = SchemaFactory.createForClass(Workout);
