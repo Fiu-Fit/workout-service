@@ -5,14 +5,13 @@ import { Observable } from 'rxjs';
 export const protobufPackage = 'workout';
 
 export interface WorkoutId {
-  id: number;
+  id: string;
 }
 
 export interface Workout {
-  id: number;
   name: string;
-  duration: number;
   description: string;
+  duration: number;
   category: string;
   athleteIds: number[];
   authorId: number;
@@ -25,8 +24,8 @@ export interface WorkoutList {
 }
 
 export interface WorkoutPutRequest {
-  id: number;
-  workout: Workout | undefined;
+  id: string;
+  workout: Workout;
 }
 
 export const WORKOUT_PACKAGE_NAME = 'workout';
