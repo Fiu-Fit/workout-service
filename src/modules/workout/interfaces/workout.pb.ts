@@ -12,9 +12,11 @@ export interface Workout {
   name: string;
   description: string;
   duration: number;
+  difficulty: number;
   category: string;
   athleteIds: number[];
   authorId: number;
+  excerciseInfo: ExcerciseInfo[];
 }
 
 export interface Empty {}
@@ -34,6 +36,12 @@ export interface WorkoutName {
 
 export interface WorkoutCategory {
   category: string;
+}
+
+export interface ExcerciseInfo {
+  exerciseId: string;
+  repetitions?: number | undefined;
+  duration?: number | undefined;
 }
 
 export const WORKOUT_PACKAGE_NAME = 'workout';
