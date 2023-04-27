@@ -5,7 +5,7 @@ export type WorkoutDocument = HydratedDocument<Workout>;
 
 @Schema()
 export class Workout {
-  @Prop({ required: true })
+  @Prop({ required: true, unique: true })
   name: string;
 
   @Prop()
