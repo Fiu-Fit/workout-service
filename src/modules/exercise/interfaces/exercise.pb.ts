@@ -6,11 +6,10 @@ import { Observable } from 'rxjs';
 export const protobuffPackage = 'exercise';
 
 export interface ExerciseId {
-  id: number;
+  id: string;
 }
 
-export interface Exercise extends Document {
-  id: number;
+export interface Exercise {
   name: string;
   description: string;
   category: string;
@@ -22,6 +21,11 @@ export interface ExerciseList {
   exercises: Exercise[];
 }
 
+export interface ExercisePutRequest {
+  id: string;
+  exercise: Exercise;
+}
+
 export interface ExerciseServiceClient {
   create(request: Exercise): Observable<Exercise>;
 
@@ -29,7 +33,7 @@ export interface ExerciseServiceClient {
 
   findAll(request: Empty): Observable<ExerciseList>;
 
-  put(request: Exercise): Observable<Exercise>;
+  put(request: ExercisePutRequest): Observable<Exercise>;
 
   deleteById(request: ExerciseId): Observable<Exercise>;
 }
@@ -47,7 +51,9 @@ export interface ExerciseServiceController {
     request: Empty
   ): Promise<ExerciseList> | Observable<ExerciseList> | ExerciseList;
 
-  put(request: Exercise): Promise<Exercise> | Observable<Exercise> | Exercise;
+  put(
+    request: ExercisePutRequest
+  ): Promise<Exercise> | Observable<Exercise> | Exercise;
 
   deleteById(
     request: ExerciseId

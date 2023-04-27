@@ -1,11 +1,11 @@
 import { Body, Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
-import { ExerciseDTO } from './dto/exercise.dto';
 import { ExerciseService } from './exercise.service';
 import {
   EXERCISE_SERVICE_NAME,
-  ExerciseId,
+  Exercise,
   ExerciseList,
+  ExercisePutRequest,
 } from './interfaces/exercise.pb';
 
 @Controller('exercises')
@@ -13,8 +13,9 @@ export class ExerciseController {
   constructor(private exerciseService: ExerciseService) {}
 
   @GrpcMethod(EXERCISE_SERVICE_NAME, 'create')
-  createExercise(@Body() exerciseDTO: ExerciseDTO): Promise<ExerciseDTO> {
-    return this.exerciseService.createExercise(exerciseDTO);
+  createExercise(@Body() exercise: Exercise): Promise<Exercise> {
+    console.log(exercise);
+    return this.exerciseService.createExercise(exercise);
   }
 
   @GrpcMethod(EXERCISE_SERVICE_NAME, 'findAll')
@@ -23,21 +24,20 @@ export class ExerciseController {
   }
 
   @GrpcMethod(EXERCISE_SERVICE_NAME, 'findById')
-  getExercise(exerciseID: ExerciseId): Promise<ExerciseDTO> {
-    return this.exerciseService.getExercise(exerciseID);
+  getExercise(id: string): Promise<Exercise> {
+    return this.exerciseService.getExercise(id);
   }
 
   @GrpcMethod(EXERCISE_SERVICE_NAME, 'put')
-  updateExercise(
-    exerciseID: ExerciseId,
-    @Body() exerciseDTO: ExerciseDTO
-  ): Promise<ExerciseDTO> {
-    return this.exerciseService.updateExercise(exerciseID, exerciseDTO);
+  updateExercise(exercise_request: ExercisePutRequest): Promise<Exercise> {
+    return this.exerciseService.updateExercise(
+      exercise_request.id,
+      exercise_request.exercise
+    );
   }
 
   @GrpcMethod(EXERCISE_SERVICE_NAME, 'deleteById')
-  deleteExercise(exerciseID: ExerciseId): Promise<ExerciseDTO> {
-    console.log(exerciseID);
-    return this.exerciseService.deleteExercise(exerciseID);
+  deleteExercise(id: string): Promise<Exercise> {
+    return this.exerciseService.deleteExercise(id);
   }
 }

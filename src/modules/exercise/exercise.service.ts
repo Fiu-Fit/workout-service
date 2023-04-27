@@ -1,8 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { ObjectId } from 'mongodb';
 import { Model } from 'mongoose';
-import { ExerciseDTO } from './dto/exercise.dto';
-import { ExerciseId, ExerciseList } from './interfaces/exercise.pb';
+import { ExerciseList } from './interfaces/exercise.pb';
 import { Exercise } from './schemas/exercise.schema';
 
 @Injectable()
@@ -11,9 +11,9 @@ export class ExerciseService {
     @InjectModel(Exercise.name) private exerciseModel: Model<Exercise>
   ) {}
 
-  createExercise(exerciseDTO: ExerciseDTO): Promise<Exercise> {
-    const exercise = new this.exerciseModel(exerciseDTO);
-    return exercise.save();
+  createExercise(exercise: Exercise): Promise<Exercise> {
+    const new_exercise = new this.exerciseModel(exercise);
+    return new_exercise.save();
   }
 
   async getExercises(): Promise<ExerciseList> {
@@ -21,21 +21,20 @@ export class ExerciseService {
     return { exercises };
   }
 
-  async getExercise(exerciseID: ExerciseId): Promise<Exercise> {
-    const exercise = await this.exerciseModel.findOne({ id: exerciseID.id });
+  async getExercise(id: string): Promise<Exercise> {
+    const exercise = await this.exerciseModel.findById({
+      _id: new ObjectId(id),
+    });
     if (!exercise) {
       throw new NotFoundException('Exercise not found');
     }
     return exercise;
   }
 
-  async updateExercise(
-    exerciseID: ExerciseId,
-    exerciseDTO: ExerciseDTO
-  ): Promise<Exercise> {
-    const updatedExercise = await this.exerciseModel.findOneAndUpdate(
-      { id: exerciseID.id },
-      exerciseDTO,
+  async updateExercise(id: string, exercise: Exercise): Promise<Exercise> {
+    const updatedExercise = await this.exerciseModel.findByIdAndUpdate(
+      id,
+      exercise,
       { new: true }
     );
     if (!updatedExercise) {
@@ -44,10 +43,9 @@ export class ExerciseService {
     return updatedExercise;
   }
 
-  // Detele Exercise
-  async deleteExercise(exerciseID: ExerciseId): Promise<Exercise> {
-    const deletedExercise = await this.exerciseModel.findOneAndDelete({
-      id: exerciseID.id,
+  async deleteExercise(id: string): Promise<Exercise> {
+    const deletedExercise = await this.exerciseModel.findByIdAndDelete({
+      _id: new ObjectId(id),
     });
     if (!deletedExercise) {
       throw new NotFoundException('Exercise not found');
