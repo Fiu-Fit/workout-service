@@ -3,7 +3,10 @@ import { GrpcMethod } from '@nestjs/microservices';
 import { WorkoutDto } from './dto/workout.dto';
 import {
   WORKOUT_SERVICE_NAME,
+  WorkoutCategory,
+  WorkoutId,
   WorkoutList,
+  WorkoutName,
   WorkoutPutRequest,
 } from './interfaces/workout.pb';
 import { WorkoutsService } from './workouts.service';
@@ -24,26 +27,33 @@ export class WorkoutsController {
   }
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'findById')
-  getWorkout(id: string): Promise<WorkoutDto | null> {
-    return this.workoutsService.getWorkoutById(id);
+  getWorkoutById(workoutId: WorkoutId): Promise<WorkoutDto> {
+    return this.workoutsService.getWorkoutById(workoutId.id);
+  }
+
+  @GrpcMethod(WORKOUT_SERVICE_NAME, 'findByName')
+  getWorkoutByName(workoutName: WorkoutName): Promise<WorkoutDto> {
+    return this.workoutsService.getWorkoutByName(workoutName.name);
+  }
+
+  @GrpcMethod(WORKOUT_SERVICE_NAME, 'findByCategory')
+  getWorkoutsByCategory(
+    workoutCategory: WorkoutCategory
+  ): Promise<WorkoutList> {
+    return this.workoutsService.getWorkoutsByCategory(workoutCategory.category);
   }
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'deleteById')
-  deleteWorkout(id: string): Promise<WorkoutDto> {
-    try {
-      return this.workoutsService.deleteWorkout(id);
-    } catch (e) {
-      if ((e as any)?.code === 'P2025') {
-        throw new NotFoundException('Workout not found');
-      }
-      throw e;
+  deleteWorkout(workoutId: WorkoutId): Promise<WorkoutDto> {
+    const deletedWorkout = this.workoutsService.deleteWorkout(workoutId.id);
+    if (!deletedWorkout) {
+      throw new NotFoundException('Exercise not found');
     }
+    return deletedWorkout;
   }
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'put')
-  updateWorkout(
-    @Body() workoutRequest: WorkoutPutRequest
-  ): Promise<WorkoutDto> {
+  updateWorkout(workoutRequest: WorkoutPutRequest): Promise<WorkoutDto> {
     return this.workoutsService.updateWorkout(
       workoutRequest.id,
       workoutRequest.workout
