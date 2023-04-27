@@ -4,7 +4,9 @@ import { ExerciseService } from './exercise.service';
 import {
   EXERCISE_SERVICE_NAME,
   Exercise,
+  ExerciseCategory,
   ExerciseList,
+  ExerciseName,
   ExercisePutRequest,
 } from './interfaces/exercise.pb';
 
@@ -39,5 +41,15 @@ export class ExerciseController {
   @GrpcMethod(EXERCISE_SERVICE_NAME, 'deleteById')
   deleteExercise(id: string): Promise<Exercise> {
     return this.exerciseService.deleteExercise(id);
+  }
+
+  @GrpcMethod(EXERCISE_SERVICE_NAME, 'findByName')
+  getExerciseByName(name: ExerciseName): Promise<Exercise> {
+    return this.exerciseService.getExerciseByName(name.name);
+  }
+
+  @GrpcMethod(EXERCISE_SERVICE_NAME, 'findByCategory')
+  getExerciseByCategory(category: ExerciseCategory): Promise<Exercise> {
+    return this.exerciseService.getExerciseByCategory(category.category);
   }
 }

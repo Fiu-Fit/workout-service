@@ -52,4 +52,20 @@ export class ExerciseService {
     }
     return deletedExercise;
   }
+
+  async getExerciseByName(name: string): Promise<Exercise> {
+    const exercise = await this.exerciseModel.findOne({ name: name });
+    if (!exercise) {
+      throw new NotFoundException('Exercise not found');
+    }
+    return exercise;
+  }
+
+  async getExerciseByCategory(category: string): Promise<Exercise> {
+    const exercise = await this.exerciseModel.findOne({ category: category });
+    if (!exercise) {
+      throw new NotFoundException('Exercise not found');
+    }
+    return exercise;
+  }
 }
