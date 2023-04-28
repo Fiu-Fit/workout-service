@@ -1,4 +1,3 @@
-import { LoggerFactory } from '@fiu-fit/common';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ObjectId } from 'mongodb';
@@ -6,8 +5,6 @@ import { Model } from 'mongoose';
 import { WorkoutDto } from './dto/workout.dto';
 import { WorkoutList } from './interfaces/workout.pb';
 import { Workout } from './schemas/workout.schema';
-
-const logger = LoggerFactory('WorkoutsService');
 
 @Injectable()
 export class WorkoutsService {
@@ -47,7 +44,7 @@ export class WorkoutsService {
     return { workouts } as WorkoutList;
   }
 
-  async getWorkoutsById(exerciseId: string): Promise<WorkoutList> {
+  async getWorkoutsByExerciseId(exerciseId: string): Promise<WorkoutList> {
     const workouts = await this.workoutModel.find({
       exercises: { $elemMatch: { exerciseId } },
     });
@@ -65,7 +62,6 @@ export class WorkoutsService {
   }
 
   async updateWorkout(id: string, updateWorkout: Workout): Promise<Workout> {
-    logger.info('Updating workout with id: ', id);
     const updatedWorkout = (await this.workoutModel.findByIdAndUpdate(
       { _id: new ObjectId(id) },
       updateWorkout,

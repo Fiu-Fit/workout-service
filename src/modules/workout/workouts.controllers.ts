@@ -46,7 +46,7 @@ export class WorkoutsController {
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'findByExerciseId')
   getWorkoutsByExerciseId(exerciseId: ExerciseId): Promise<WorkoutList> {
-    return this.workoutsService.getWorkoutsById(exerciseId.exerciseId);
+    return this.workoutsService.getWorkoutsByExerciseId(exerciseId.exerciseId);
   }
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'deleteById')
