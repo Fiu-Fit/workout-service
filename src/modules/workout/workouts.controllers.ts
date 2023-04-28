@@ -1,7 +1,8 @@
-import { Body, Controller, NotFoundException } from '@nestjs/common';
+import { Body, Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { WorkoutDto } from './dto/workout.dto';
 import {
+  ExerciseId,
   WORKOUT_SERVICE_NAME,
   WorkoutCategory,
   WorkoutId,
@@ -43,12 +44,14 @@ export class WorkoutsController {
     return this.workoutsService.getWorkoutsByCategory(workoutCategory.category);
   }
 
+  @GrpcMethod(WORKOUT_SERVICE_NAME, 'findByExerciseId')
+  getWorkoutsByExerciseId(exerciseId: ExerciseId): Promise<WorkoutList> {
+    return this.workoutsService.getWorkoutsById(exerciseId.exerciseId);
+  }
+
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'deleteById')
   deleteWorkout(workoutId: WorkoutId): Promise<WorkoutDto> {
     const deletedWorkout = this.workoutsService.deleteWorkout(workoutId.id);
-    if (!deletedWorkout) {
-      throw new NotFoundException('Exercise not found');
-    }
     return deletedWorkout;
   }
 

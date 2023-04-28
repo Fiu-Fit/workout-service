@@ -47,6 +47,13 @@ export class WorkoutsService {
     return { workouts } as WorkoutList;
   }
 
+  async getWorkoutsById(exerciseId: string): Promise<WorkoutList> {
+    const workouts = await this.workoutModel.find({
+      exercises: { $elemMatch: { exerciseId } },
+    });
+    return { workouts } as WorkoutList;
+  }
+
   async deleteWorkout(id: string): Promise<Workout> {
     const workout = await this.workoutModel.findByIdAndDelete({
       _id: new ObjectId(id),

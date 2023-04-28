@@ -44,6 +44,10 @@ export interface WorkoutCategory {
   category: string;
 }
 
+export interface ExerciseId {
+  exerciseId: string;
+}
+
 export const WORKOUT_PACKAGE_NAME = 'workout';
 
 export interface WorkoutServiceClient {
@@ -54,6 +58,8 @@ export interface WorkoutServiceClient {
   findByCategory(request: WorkoutCategory): Observable<WorkoutList>;
 
   findByName(request: WorkoutName): Observable<Workout>;
+
+  findByExerciseId(request: ExerciseId): Observable<WorkoutList>;
 
   findAll(request: Empty): Observable<WorkoutList>;
 
@@ -77,6 +83,10 @@ export interface WorkoutServiceController {
     request: WorkoutName
   ): Promise<Workout> | Observable<Workout> | Workout;
 
+  findByExerciseId(
+    request: ExerciseId
+  ): Promise<WorkoutList> | Observable<WorkoutList> | WorkoutList;
+
   findAll(
     request: Empty
   ): Promise<WorkoutList> | Observable<WorkoutList> | WorkoutList;
@@ -97,6 +107,7 @@ export function WorkoutServiceControllerMethods() {
       'findById',
       'findByCategory',
       'findByName',
+      'findByExerciseId',
       'findAll',
       'put',
       'deleteById',
