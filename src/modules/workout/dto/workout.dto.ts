@@ -31,8 +31,5 @@ export class WorkoutDto {
   exercises: ExerciseInfo[];
 
   @IsNumber()
-  athleteIds: number[];
-
-  @IsNumber()
   authorId: number;
 }

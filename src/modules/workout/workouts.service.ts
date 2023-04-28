@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ObjectId } from 'mongodb';
 import { Model } from 'mongoose';
 import { WorkoutDto } from './dto/workout.dto';
 import { WorkoutList } from './interfaces/workout.pb';
@@ -14,8 +13,8 @@ export class WorkoutsService {
   ) {}
 
   createWorkout(createWorkoutDto: WorkoutDto): Promise<Workout> {
-    const createdWorkout = new this.workoutModel(createWorkoutDto);
-    return createdWorkout.save();
+    const createdWorkout = this.workoutModel.create(createWorkoutDto);
+    return createdWorkout;
   }
 
   async getWorkouts(): Promise<WorkoutList> {
@@ -24,7 +23,7 @@ export class WorkoutsService {
   }
 
   async getWorkoutById(id: string): Promise<Workout> {
-    const workout = await this.workoutModel.findById({ _id: new ObjectId(id) });
+    const workout = await this.workoutModel.findById({ _id: id });
     if (!workout) {
       throw new NotFoundException('Workout not found');
     }
@@ -52,9 +51,7 @@ export class WorkoutsService {
   }
 
   async deleteWorkout(id: string): Promise<Workout> {
-    const workout = await this.workoutModel.findByIdAndDelete({
-      _id: new ObjectId(id),
-    });
+    const workout = await this.workoutModel.findByIdAndDelete({ _id: id });
     if (!workout) {
       throw new NotFoundException('Workout not found');
     }
@@ -63,7 +60,7 @@ export class WorkoutsService {
 
   async updateWorkout(id: string, updateWorkout: Workout): Promise<Workout> {
     const updatedWorkout = (await this.workoutModel.findByIdAndUpdate(
-      { _id: new ObjectId(id) },
+      { _id: id },
       updateWorkout,
       { new: true }
     )) as Workout;

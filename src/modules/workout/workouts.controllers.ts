@@ -23,8 +23,7 @@ export class WorkoutsController {
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'create')
   createWorkout(@Body() createWorkoutDto: WorkoutDto): Promise<WorkoutDto> {
-    const workout = this.workoutsService.createWorkout(createWorkoutDto);
-    return workout;
+    return this.workoutsService.createWorkout(createWorkoutDto);
   }
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'findById')

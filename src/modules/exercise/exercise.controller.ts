@@ -1,4 +1,4 @@
-import { Body, Controller } from '@nestjs/common';
+import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { ExerciseService } from './exercise.service';
 import {
@@ -15,8 +15,7 @@ export class ExerciseController {
   constructor(private exerciseService: ExerciseService) {}
 
   @GrpcMethod(EXERCISE_SERVICE_NAME, 'create')
-  createExercise(@Body() exercise: Exercise): Promise<Exercise> {
-    console.log(exercise);
+  createExercise(exercise: Exercise): Promise<Exercise> {
     return this.exerciseService.createExercise(exercise);
   }
 
@@ -31,10 +30,10 @@ export class ExerciseController {
   }
 
   @GrpcMethod(EXERCISE_SERVICE_NAME, 'put')
-  updateExercise(exercise_request: ExercisePutRequest): Promise<Exercise> {
+  updateExercise(exerciseRequest: ExercisePutRequest): Promise<Exercise> {
     return this.exerciseService.updateExercise(
-      exercise_request.id,
-      exercise_request.exercise
+      exerciseRequest.id,
+      exerciseRequest.exercise
     );
   }
 
@@ -44,12 +43,12 @@ export class ExerciseController {
   }
 
   @GrpcMethod(EXERCISE_SERVICE_NAME, 'findByName')
-  getExerciseByName(name: ExerciseName): Promise<Exercise> {
-    return this.exerciseService.getExerciseByName(name.name);
+  getExerciseByName({ name }: ExerciseName): Promise<Exercise> {
+    return this.exerciseService.getExerciseByName(name);
   }
 
   @GrpcMethod(EXERCISE_SERVICE_NAME, 'findByCategory')
-  getExerciseByCategory(category: ExerciseCategory): Promise<ExerciseList> {
-    return this.exerciseService.getExerciseByCategory(category.category);
+  getExerciseByCategory({ category }: ExerciseCategory): Promise<ExerciseList> {
+    return this.exerciseService.getExerciseByCategory(category);
   }
 }

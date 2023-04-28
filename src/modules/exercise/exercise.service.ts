@@ -12,8 +12,8 @@ export class ExerciseService {
   ) {}
 
   createExercise(exercise: Exercise): Promise<Exercise> {
-    const new_exercise = new this.exerciseModel(exercise);
-    return new_exercise.save();
+    const newExercise = this.exerciseModel.create(exercise);
+    return newExercise;
   }
 
   async getExercises(): Promise<ExerciseList> {
