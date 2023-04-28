@@ -14,9 +14,15 @@ export interface Workout {
   duration: number;
   difficulty: number;
   category: string;
+  exercises: ExerciseInfo[];
   athleteIds: number[];
   authorId: number;
-  excerciseInfo: ExcerciseInfo[];
+}
+
+export interface ExerciseInfo {
+  exerciseId: string;
+  repetitions: number;
+  duration: number;
 }
 
 export interface Empty {}
@@ -38,12 +44,6 @@ export interface WorkoutCategory {
   category: string;
 }
 
-export interface ExcerciseInfo {
-  exerciseId: string;
-  repetitions?: number | undefined;
-  duration?: number | undefined;
-}
-
 export const WORKOUT_PACKAGE_NAME = 'workout';
 
 export interface WorkoutServiceClient {
@@ -51,9 +51,9 @@ export interface WorkoutServiceClient {
 
   findById(request: WorkoutId): Observable<Workout>;
 
-  findByName(request: WorkoutName): Observable<Workout>;
-
   findByCategory(request: WorkoutCategory): Observable<WorkoutList>;
+
+  findByName(request: WorkoutName): Observable<Workout>;
 
   findAll(request: Empty): Observable<WorkoutList>;
 
@@ -69,13 +69,13 @@ export interface WorkoutServiceController {
     request: WorkoutId
   ): Promise<Workout> | Observable<Workout> | Workout;
 
-  findByName(
-    request: WorkoutName
-  ): Promise<Workout> | Observable<Workout> | Workout;
-
   findByCategory(
     request: WorkoutCategory
   ): Promise<WorkoutList> | Observable<WorkoutList> | WorkoutList;
+
+  findByName(
+    request: WorkoutName
+  ): Promise<Workout> | Observable<Workout> | Workout;
 
   findAll(
     request: Empty
@@ -95,8 +95,8 @@ export function WorkoutServiceControllerMethods() {
     const grpcMethods: string[] = [
       'create',
       'findById',
-      'findByName',
       'findByCategory',
+      'findByName',
       'findAll',
       'put',
       'deleteById',

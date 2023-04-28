@@ -49,7 +49,7 @@ export class ExerciseController {
   }
 
   @GrpcMethod(EXERCISE_SERVICE_NAME, 'findByCategory')
-  getExerciseByCategory(category: ExerciseCategory): Promise<Exercise> {
+  getExerciseByCategory(category: ExerciseCategory): Promise<ExerciseList> {
     return this.exerciseService.getExerciseByCategory(category.category);
   }
 }

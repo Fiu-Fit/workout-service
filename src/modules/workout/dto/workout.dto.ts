@@ -1,5 +1,16 @@
 import { IsNotEmpty, IsNumber, IsString } from 'class-validator';
 
+export class ExerciseInfo {
+  @IsString()
+  exerciseId: string;
+
+  @IsNumber()
+  repetitions?: number;
+
+  @IsNumber()
+  duration?: number;
+}
+
 export class WorkoutDto {
   @IsString()
   @IsNotEmpty()
@@ -11,8 +22,13 @@ export class WorkoutDto {
   @IsNumber()
   duration: number;
 
+  @IsNumber()
+  difficulty: number;
+
   @IsString()
   category?: string;
+
+  exercises: ExerciseInfo[];
 
   @IsNumber()
   athleteIds: number[];

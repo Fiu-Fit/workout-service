@@ -1,20 +1,11 @@
 /* eslint-disable */
-import { Document } from 'mongoose';
 import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
 
-export const protobuffPackage = 'exercise';
+export const protobufPackage = 'exercise';
 
 export interface ExerciseId {
   id: string;
-}
-
-export interface ExerciseName {
-  name: string;
-}
-
-export interface ExerciseCategory {
-  category: string;
 }
 
 export interface Exercise {
@@ -34,20 +25,30 @@ export interface ExercisePutRequest {
   exercise: Exercise;
 }
 
+export interface ExerciseName {
+  name: string;
+}
+
+export interface ExerciseCategory {
+  category: string;
+}
+
+export const EXERCISE_PACKAGE_NAME = 'exercise';
+
 export interface ExerciseServiceClient {
   create(request: Exercise): Observable<Exercise>;
 
-  findAll(request: Empty): Observable<ExerciseList>;
-
   findById(request: ExerciseId): Observable<Exercise>;
+
+  findByName(request: ExerciseName): Observable<Exercise>;
+
+  findByCategory(request: ExerciseCategory): Observable<ExerciseList>;
+
+  findAll(request: Empty): Observable<ExerciseList>;
 
   put(request: ExercisePutRequest): Observable<Exercise>;
 
   deleteById(request: ExerciseId): Observable<Exercise>;
-
-  findByName(request: ExerciseName): Observable<Exercise>;
-
-  findByCategory(request: ExerciseCategory): Observable<Exercise>;
 }
 
 export interface ExerciseServiceController {
@@ -58,6 +59,14 @@ export interface ExerciseServiceController {
   findById(
     request: ExerciseId
   ): Promise<Exercise> | Observable<Exercise> | Exercise;
+
+  findByName(
+    request: ExerciseName
+  ): Promise<Exercise> | Observable<Exercise> | Exercise;
+
+  findByCategory(
+    request: ExerciseCategory
+  ): Promise<ExerciseList> | Observable<ExerciseList> | ExerciseList;
 
   findAll(
     request: Empty
@@ -70,14 +79,6 @@ export interface ExerciseServiceController {
   deleteById(
     request: ExerciseId
   ): Promise<Exercise> | Observable<Exercise> | Exercise;
-
-  findByName(
-    request: ExerciseName
-  ): Promise<Exercise> | Observable<Exercise> | Exercise;
-
-  findByCategory(
-    request: ExerciseCategory
-  ): Promise<Exercise> | Observable<Exercise> | Exercise;
 }
 
 export function ExerciseServiceControllerMethods() {
@@ -85,11 +86,11 @@ export function ExerciseServiceControllerMethods() {
     const grpcMethods: string[] = [
       'create',
       'findById',
+      'findByName',
+      'findByCategory',
       'findAll',
       'put',
       'deleteById',
-      'getByName',
-      'getByCategory',
     ];
     for (const method of grpcMethods) {
       const descriptor: any = Reflect.getOwnPropertyDescriptor(
