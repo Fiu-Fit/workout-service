@@ -1,6 +1,4 @@
-export class ExerciseDTO {
-  id: number;
-
+export class ExerciseDto {
   name: string;
 
   description: string;
