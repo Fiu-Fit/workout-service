@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { GrpcMethod, GrpcStreamMethod } from '@nestjs/microservices';
 import { Observable } from 'rxjs';
+import { ExerciseDto } from '../dto/exercise.dto';
 
 export const protobufPackage = 'exercise';
 
@@ -9,6 +10,7 @@ export interface ExerciseId {
 }
 
 export interface Exercise {
+  id: string;
   name: string;
   description: string;
   category: string;
@@ -16,13 +18,8 @@ export interface Exercise {
 
 export interface Empty {}
 
-export interface ExerciseList {
+export interface Exercises {
   exercises: Exercise[];
-}
-
-export interface ExercisePutRequest {
-  id: string;
-  exercise: Exercise;
 }
 
 export interface ExerciseName {
@@ -36,24 +33,24 @@ export interface ExerciseCategory {
 export const EXERCISE_PACKAGE_NAME = 'exercise';
 
 export interface ExerciseServiceClient {
-  create(request: Exercise): Observable<Exercise>;
+  create(request: ExerciseDto): Observable<Exercise>;
 
   findById(request: ExerciseId): Observable<Exercise>;
 
   findByName(request: ExerciseName): Observable<Exercise>;
 
-  findByCategory(request: ExerciseCategory): Observable<ExerciseList>;
+  findByCategory(request: ExerciseCategory): Observable<Exercises>;
 
-  findAll(request: Empty): Observable<ExerciseList>;
+  findAll(request: Empty): Observable<Exercises>;
 
-  put(request: ExercisePutRequest): Observable<Exercise>;
+  put(request: Exercise): Observable<Exercise>;
 
   deleteById(request: ExerciseId): Observable<Exercise>;
 }
 
 export interface ExerciseServiceController {
   create(
-    request: Exercise
+    request: ExerciseDto
   ): Promise<Exercise> | Observable<Exercise> | Exercise;
 
   findById(
@@ -66,15 +63,13 @@ export interface ExerciseServiceController {
 
   findByCategory(
     request: ExerciseCategory
-  ): Promise<ExerciseList> | Observable<ExerciseList> | ExerciseList;
+  ): Promise<Exercises> | Observable<Exercises> | Exercises;
 
   findAll(
     request: Empty
-  ): Promise<ExerciseList> | Observable<ExerciseList> | ExerciseList;
+  ): Promise<Exercises> | Observable<Exercises> | Exercises;
 
-  put(
-    request: ExercisePutRequest
-  ): Promise<Exercise> | Observable<Exercise> | Exercise;
+  put(request: Exercise): Promise<Exercise> | Observable<Exercise> | Exercise;
 
   deleteById(
     request: ExerciseId
