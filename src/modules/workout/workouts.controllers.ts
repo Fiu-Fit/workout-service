@@ -4,11 +4,11 @@ import { WorkoutDto } from './dto/workout.dto';
 import {
   ExerciseId,
   WORKOUT_SERVICE_NAME,
+  Workout,
   WorkoutCategory,
   WorkoutId,
-  WorkoutList,
   WorkoutName,
-  WorkoutPutRequest,
+  Workouts,
 } from './interfaces/workout.pb';
 import { WorkoutsService } from './workouts.service';
 
@@ -17,34 +17,32 @@ export class WorkoutsController {
   constructor(private workoutsService: WorkoutsService) {}
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'findAll')
-  getWorkouts(): Promise<WorkoutList> {
+  getWorkouts(): Promise<Workouts> {
     return this.workoutsService.getWorkouts();
   }
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'create')
-  createWorkout(@Body() createWorkoutDto: WorkoutDto): Promise<WorkoutDto> {
+  createWorkout(@Body() createWorkoutDto: WorkoutDto): Promise<Workout> {
     return this.workoutsService.createWorkout(createWorkoutDto);
   }
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'findById')
-  getWorkoutById(workoutId: WorkoutId): Promise<WorkoutDto> {
+  getWorkoutById(workoutId: WorkoutId): Promise<Workout> {
     return this.workoutsService.getWorkoutById(workoutId.id);
   }
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'findByName')
-  getWorkoutByName(workoutName: WorkoutName): Promise<WorkoutDto> {
+  getWorkoutByName(workoutName: WorkoutName): Promise<Workout> {
     return this.workoutsService.getWorkoutByName(workoutName.name);
   }
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'findByCategory')
-  getWorkoutsByCategory(
-    workoutCategory: WorkoutCategory
-  ): Promise<WorkoutList> {
+  getWorkoutsByCategory(workoutCategory: WorkoutCategory): Promise<Workouts> {
     return this.workoutsService.getWorkoutsByCategory(workoutCategory.category);
   }
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'findByExerciseId')
-  getWorkoutsByExerciseId(exerciseId: ExerciseId): Promise<WorkoutList> {
+  getWorkoutsByExerciseId(exerciseId: ExerciseId): Promise<Workouts> {
     return this.workoutsService.getWorkoutsByExerciseId(exerciseId.exerciseId);
   }
 
@@ -55,10 +53,10 @@ export class WorkoutsController {
   }
 
   @GrpcMethod(WORKOUT_SERVICE_NAME, 'put')
-  updateWorkout(workoutRequest: WorkoutPutRequest): Promise<WorkoutDto> {
+  updateWorkout(workoutRequest: Workout): Promise<Workout> {
     return this.workoutsService.updateWorkout(
       workoutRequest.id,
-      workoutRequest.workout
+      workoutRequest
     );
   }
 }

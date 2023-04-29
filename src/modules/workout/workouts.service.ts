@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { NotFoundException } from '../../shared/rpc-exceptions/NotFoundException';
 import { WorkoutDto } from './dto/workout.dto';
-import { WorkoutList } from './interfaces/workout.pb';
+import { Workouts } from './interfaces/workout.pb';
 import { Workout } from './schemas/workout.schema';
 
 @Injectable()
@@ -12,14 +13,14 @@ export class WorkoutsService {
     private workoutModel: Model<Workout>
   ) {}
 
-  createWorkout(createWorkoutDto: WorkoutDto): Promise<Workout> {
-    const createdWorkout = this.workoutModel.create(createWorkoutDto);
+  createWorkout(newWorkout: WorkoutDto): Promise<Workout> {
+    const createdWorkout = this.workoutModel.create(newWorkout);
     return createdWorkout;
   }
 
-  async getWorkouts(): Promise<WorkoutList> {
+  async getWorkouts(): Promise<Workouts> {
     const workouts = await this.workoutModel.find();
-    return { workouts } as WorkoutList;
+    return { workouts } as Workouts;
   }
 
   async getWorkoutById(id: string): Promise<Workout> {
@@ -38,16 +39,16 @@ export class WorkoutsService {
     return workout;
   }
 
-  async getWorkoutsByCategory(category: string): Promise<WorkoutList> {
+  async getWorkoutsByCategory(category: string): Promise<Workouts> {
     const workouts = await this.workoutModel.find({ category });
-    return { workouts } as WorkoutList;
+    return { workouts } as Workouts;
   }
 
-  async getWorkoutsByExerciseId(exerciseId: string): Promise<WorkoutList> {
+  async getWorkoutsByExerciseId(exerciseId: string): Promise<Workouts> {
     const workouts = await this.workoutModel.find({
       exercises: { $elemMatch: { exerciseId } },
     });
-    return { workouts } as WorkoutList;
+    return { workouts } as Workouts;
   }
 
   async deleteWorkout(id: string): Promise<Workout> {
@@ -58,10 +59,10 @@ export class WorkoutsService {
     return workout;
   }
 
-  async updateWorkout(id: string, updateWorkout: Workout): Promise<Workout> {
+  async updateWorkout(id: string, workout: WorkoutDto): Promise<Workout> {
     const updatedWorkout = (await this.workoutModel.findByIdAndUpdate(
       { _id: id },
-      updateWorkout,
+      workout,
       { new: true }
     )) as Workout;
 
