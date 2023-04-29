@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { ObjectId } from 'mongodb';
 import { Model } from 'mongoose';
-import { ExerciseList } from './interfaces/exercise.pb';
+import { NotFoundException } from '../../shared/rpc-exceptions/NotFoundException';
+import { ExerciseDto } from './dto/exercise.dto';
+import { Exercises } from './interfaces/exercise.pb';
 import { Exercise } from './schemas/exercise.schema';
 
 @Injectable()
@@ -11,20 +12,18 @@ export class ExerciseService {
     @InjectModel(Exercise.name) private exerciseModel: Model<Exercise>
   ) {}
 
-  createExercise(exercise: Exercise): Promise<Exercise> {
+  createExercise(exercise: ExerciseDto): Promise<Exercise> {
     const newExercise = this.exerciseModel.create(exercise);
     return newExercise;
   }
 
-  async getExercises(): Promise<ExerciseList> {
+  async getExercises(): Promise<Exercises> {
     const exercises = await this.exerciseModel.find();
     return { exercises };
   }
 
   async getExercise(id: string): Promise<Exercise> {
-    const exercise = await this.exerciseModel.findById({
-      _id: new ObjectId(id),
-    });
+    const exercise = await this.exerciseModel.findById({ _id: id });
     if (!exercise) {
       throw new NotFoundException('Exercise not found');
     }
@@ -33,7 +32,7 @@ export class ExerciseService {
 
   async updateExercise(id: string, exercise: Exercise): Promise<Exercise> {
     const updatedExercise = await this.exerciseModel.findByIdAndUpdate(
-      id,
+      { _id: id },
       exercise,
       { new: true }
     );
@@ -45,7 +44,7 @@ export class ExerciseService {
 
   async deleteExercise(id: string): Promise<Exercise> {
     const deletedExercise = await this.exerciseModel.findByIdAndDelete({
-      _id: new ObjectId(id),
+      _id: id,
     });
     if (!deletedExercise) {
       throw new NotFoundException('Exercise not found');
@@ -61,7 +60,7 @@ export class ExerciseService {
     return exercise;
   }
 
-  async getExerciseByCategory(category: string): Promise<ExerciseList> {
+  async getExerciseByCategory(category: string): Promise<Exercises> {
     const exercises = await this.exerciseModel.find({ category });
     return { exercises };
   }
