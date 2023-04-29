@@ -3,8 +3,18 @@ import mongoose, { HydratedDocument } from 'mongoose';
 
 export type WorkoutDocument = HydratedDocument<Workout>;
 
+enum Units {
+  SECONDS = 0,
+  MINUTES = 1,
+  HOURS = 2,
+  REPETITIONS = 3,
+  METERS = 4,
+  KILOMETERS = 5,
+  UNRECOGNIZED = -1,
+}
+
 @Schema()
-export class ExerciseInfo {
+export class WorkoutExercise {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Exercise' })
   exerciseId: string;
 
@@ -12,11 +22,14 @@ export class ExerciseInfo {
   repetitions: number;
 
   @Prop()
-  duration: number;
+  units: Units;
 }
 
 @Schema()
 export class Workout {
+  @Prop({ type: String, name: '_id' })
+  id: string;
+
   @Prop({ required: true, unique: true })
   name: string;
 
@@ -32,8 +45,8 @@ export class Workout {
   @Prop()
   category: string;
 
-  @Prop([ExerciseInfo])
-  exercises: ExerciseInfo[];
+  @Prop([WorkoutExercise])
+  exercises: WorkoutExercise[];
 
   @Prop([Number])
   athleteIds: number[];
