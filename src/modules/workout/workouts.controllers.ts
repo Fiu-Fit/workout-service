@@ -9,7 +9,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { WorkoutDto } from './dto/workout.dto';
-import { Workout, Workouts } from './interfaces/workout.pb';
+import { Workout } from './interfaces/workout.pb';
 import { WorkoutsService } from './workouts.service';
 
 @Controller('workouts')
@@ -17,7 +17,7 @@ export class WorkoutsController {
   constructor(private workoutsService: WorkoutsService) {}
 
   @Get()
-  getWorkouts(): Promise<Workouts> {
+  getWorkouts(): Promise<Workout[]> {
     return this.workoutsService.getWorkouts();
   }
 
@@ -39,7 +39,7 @@ export class WorkoutsController {
   @Get('category/:category')
   getWorkoutsByCategory(
     @Param('category') category: string
-  ): Promise<Workouts> {
+  ): Promise<Workout[]> {
     return this.workoutsService.getWorkoutsByCategory(category);
   }
 

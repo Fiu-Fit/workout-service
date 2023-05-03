@@ -16,7 +16,7 @@ export class WorkoutExercise {
   reps: number;
 
   @Prop()
-  weight: number;
+  weight?: number;
 
   @Prop()
   units: Units;
