@@ -32,10 +32,6 @@ export interface WorkoutExercise {
 
 export interface Empty {}
 
-export interface Workouts {
-  workouts: Workout[];
-}
-
 export interface ExerciseId {
   exerciseId: string;
 }
