@@ -2,7 +2,6 @@ import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { ExerciseDto } from './dto/exercise.dto';
-import { Exercises } from './interfaces/exercise.pb';
 import { Exercise } from './schemas/exercise.schema';
 
 @Injectable()
@@ -16,9 +15,9 @@ export class ExerciseService {
     return newExercise;
   }
 
-  async getExercises(): Promise<Exercises> {
+  async getExercises(): Promise<Exercise[]> {
     const exercises = await this.exerciseModel.find();
-    return { exercises };
+    return exercises;
   }
 
   async getExercise(id: string): Promise<Exercise> {
@@ -59,8 +58,8 @@ export class ExerciseService {
     return exercise;
   }
 
-  async getExerciseByCategory(category: string): Promise<Exercises> {
+  async getExerciseByCategory(category: string): Promise<Exercise[]> {
     const exercises = await this.exerciseModel.find({ category });
-    return { exercises };
+    return exercises;
   }
 }
