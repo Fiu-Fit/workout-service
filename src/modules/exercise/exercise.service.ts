@@ -14,8 +14,14 @@ export class ExerciseService {
     return this.exerciseModel.create(exercise);
   }
 
-  getExercises(): Promise<Exercise[]> {
-    return this.exerciseModel.find();
+  getExercises(
+    q?: string,
+    parsedFilters?: Record<string, string>
+  ): Promise<Exercise[]> {
+    return this.exerciseModel.find({
+      ...(q ? { $text: { $search: q, $caseSensitive: false } } : {}),
+      ...parsedFilters,
+    });
   }
 
   async getExercise(id: string): Promise<Exercise> {

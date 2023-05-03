@@ -55,4 +55,6 @@ export class Workout {
   updatedAt?: Date;
 }
 
-export const WorkoutSchema = SchemaFactory.createForClass(Workout);
+export const WorkoutSchema = SchemaFactory.createForClass(Workout)
+  .index({ name: 'text', description: 'text', category: 'text' })
+  .index({ difficulty: 1 });
