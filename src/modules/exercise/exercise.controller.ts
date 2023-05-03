@@ -1,55 +1,58 @@
-import { Controller } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
 import { ExerciseDto } from './dto/exercise.dto';
 import { ExerciseService } from './exercise.service';
-import {
-  EXERCISE_SERVICE_NAME,
-  Exercise,
-  ExerciseCategory,
-  ExerciseId,
-  ExerciseName,
-  Exercises,
-} from './interfaces/exercise.pb';
+import { Exercise, Exercises } from './interfaces/exercise.pb';
 
 @Controller('exercises')
 export class ExerciseController {
   constructor(private exerciseService: ExerciseService) {}
 
-  @GrpcMethod(EXERCISE_SERVICE_NAME, 'create')
-  createExercise(exercise: ExerciseDto): Promise<Exercise> {
-    return this.exerciseService.createExercise(exercise);
+  @Post('create')
+  createExercise(@Body() newExercise: ExerciseDto): Promise<Exercise> {
+    console.log(newExercise);
+    return this.exerciseService.createExercise(newExercise);
   }
 
-  @GrpcMethod(EXERCISE_SERVICE_NAME, 'findAll')
+  @Get()
   getExercises(): Promise<Exercises> {
     return this.exerciseService.getExercises();
   }
 
-  @GrpcMethod(EXERCISE_SERVICE_NAME, 'findById')
-  getExercise({ id }: ExerciseId): Promise<Exercise> {
+  @Get(':id')
+  getExercise(@Param('id') id: string): Promise<Exercise> {
     return this.exerciseService.getExercise(id);
   }
 
-  @GrpcMethod(EXERCISE_SERVICE_NAME, 'put')
-  updateExercise(exerciseRequest: Exercise): Promise<Exercise> {
-    return this.exerciseService.updateExercise(
-      exerciseRequest.id,
-      exerciseRequest
-    );
+  @Put(':id')
+  updateExercise(
+    @Param('id') id: string,
+    @Body() exercise: Exercise
+  ): Promise<Exercise> {
+    return this.exerciseService.updateExercise(id, exercise);
   }
 
-  @GrpcMethod(EXERCISE_SERVICE_NAME, 'deleteById')
-  deleteExercise({ id }: ExerciseId): Promise<Exercise> {
+  @Delete(':id')
+  deleteExercise(@Param('id') id: string): Promise<Exercise> {
     return this.exerciseService.deleteExercise(id);
   }
 
-  @GrpcMethod(EXERCISE_SERVICE_NAME, 'findByName')
-  getExerciseByName({ name }: ExerciseName): Promise<Exercise> {
+  @Get('name/:name')
+  getExerciseByName(@Param('name') name: string): Promise<Exercise> {
     return this.exerciseService.getExerciseByName(name);
   }
 
-  @GrpcMethod(EXERCISE_SERVICE_NAME, 'findByCategory')
-  getExerciseByCategory({ category }: ExerciseCategory): Promise<Exercises> {
+  @Get('category/:category')
+  getExerciseByCategory(
+    @Param('category') category: string
+  ): Promise<Exercises> {
     return this.exerciseService.getExerciseByCategory(category);
   }
 }

@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { NotFoundException } from '../../shared/rpc-exceptions/NotFoundException';
 import { WorkoutDto } from './dto/workout.dto';
 import { Workouts } from './interfaces/workout.pb';
 import { Workout } from './schemas/workout.schema';
@@ -26,7 +25,7 @@ export class WorkoutsService {
   async getWorkoutById(id: string): Promise<Workout> {
     const workout = await this.workoutModel.findById({ _id: id });
     if (!workout) {
-      throw new NotFoundException('Workout not found');
+      throw new BadRequestException('Workout not found');
     }
     return workout;
   }
@@ -34,7 +33,7 @@ export class WorkoutsService {
   async getWorkoutByName(name: string): Promise<Workout> {
     const workout = await this.workoutModel.findOne({ name });
     if (!workout) {
-      throw new NotFoundException('Workout not found');
+      throw new BadRequestException('Workout not found');
     }
     return workout;
   }
@@ -44,22 +43,15 @@ export class WorkoutsService {
     return { workouts } as Workouts;
   }
 
-  async getWorkoutsByExerciseId(exerciseId: string): Promise<Workouts> {
-    const workouts = await this.workoutModel.find({
-      exercises: { $elemMatch: { exerciseId } },
-    });
-    return { workouts } as Workouts;
-  }
-
-  async deleteWorkout(id: string): Promise<Workout> {
+  async deleteWorkout(id: number): Promise<Workout> {
     const workout = await this.workoutModel.findByIdAndDelete({ _id: id });
     if (!workout) {
-      throw new NotFoundException('Workout not found');
+      throw new BadRequestException('Workout not found');
     }
     return workout;
   }
 
-  async updateWorkout(id: string, workout: WorkoutDto): Promise<Workout> {
+  async updateWorkout(id: number, workout: Workout): Promise<Workout> {
     const updatedWorkout = (await this.workoutModel.findByIdAndUpdate(
       { _id: id },
       workout,

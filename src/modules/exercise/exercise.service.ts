@@ -1,7 +1,6 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { NotFoundException } from '../../shared/rpc-exceptions/NotFoundException';
 import { ExerciseDto } from './dto/exercise.dto';
 import { Exercises } from './interfaces/exercise.pb';
 import { Exercise } from './schemas/exercise.schema';
@@ -25,7 +24,7 @@ export class ExerciseService {
   async getExercise(id: string): Promise<Exercise> {
     const exercise = await this.exerciseModel.findById({ _id: id });
     if (!exercise) {
-      throw new NotFoundException('Exercise not found');
+      throw new BadRequestException('Exercise not found');
     }
     return exercise;
   }
@@ -37,7 +36,7 @@ export class ExerciseService {
       { new: true }
     );
     if (!updatedExercise) {
-      throw new NotFoundException('Exercise not found');
+      throw new BadRequestException('Exercise not found');
     }
     return updatedExercise;
   }
@@ -47,7 +46,7 @@ export class ExerciseService {
       _id: id,
     });
     if (!deletedExercise) {
-      throw new NotFoundException('Exercise not found');
+      throw new BadRequestException('Exercise not found');
     }
     return deletedExercise;
   }
@@ -55,7 +54,7 @@ export class ExerciseService {
   async getExerciseByName(name: string): Promise<Exercise> {
     const exercise = await this.exerciseModel.findOne({ name });
     if (!exercise) {
-      throw new NotFoundException('Exercise not found');
+      throw new BadRequestException('Exercise not found');
     }
     return exercise;
   }

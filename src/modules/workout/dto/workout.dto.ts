@@ -1,19 +1,45 @@
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  IsString,
+  Max,
+  MaxLength,
+  Min,
+} from 'class-validator';
 import { WorkoutExercise } from '../interfaces/workout.pb';
 
 export class WorkoutDto {
+  @IsString()
+  @IsNotEmpty()
   name: string;
 
-  description?: string;
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
+  description: string;
 
+  @IsNumber()
+  @IsNotEmpty()
   duration: number;
 
+  @IsNumber()
+  @Min(1)
+  @Max(5)
+  @IsNotEmpty()
   difficulty: number;
 
-  category?: string;
+  @IsString()
+  @IsNotEmpty()
+  category: string;
 
-  exercises: WorkoutExercise[];
+  @IsOptional()
+  exercises: WorkoutExercise[] = [];
 
-  athleteIds: number[] = [];
+  @IsOptional()
+  athleteIds: number[];
 
+  @IsNumber()
+  @IsNotEmpty()
   authorId: number;
 }

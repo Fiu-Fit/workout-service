@@ -1,62 +1,59 @@
-import { Body, Controller } from '@nestjs/common';
-import { GrpcMethod } from '@nestjs/microservices';
-import { WorkoutDto } from './dto/workout.dto';
 import {
-  ExerciseId,
-  WORKOUT_SERVICE_NAME,
-  Workout,
-  WorkoutCategory,
-  WorkoutId,
-  WorkoutName,
-  Workouts,
-} from './interfaces/workout.pb';
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  ParseIntPipe,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { WorkoutDto } from './dto/workout.dto';
+import { Workout, Workouts } from './interfaces/workout.pb';
 import { WorkoutsService } from './workouts.service';
 
 @Controller('workouts')
 export class WorkoutsController {
   constructor(private workoutsService: WorkoutsService) {}
 
-  @GrpcMethod(WORKOUT_SERVICE_NAME, 'findAll')
+  @Get()
   getWorkouts(): Promise<Workouts> {
     return this.workoutsService.getWorkouts();
   }
 
-  @GrpcMethod(WORKOUT_SERVICE_NAME, 'create')
+  @Post('create')
   createWorkout(@Body() createWorkoutDto: WorkoutDto): Promise<Workout> {
     return this.workoutsService.createWorkout(createWorkoutDto);
   }
 
-  @GrpcMethod(WORKOUT_SERVICE_NAME, 'findById')
-  getWorkoutById(workoutId: WorkoutId): Promise<Workout> {
-    return this.workoutsService.getWorkoutById(workoutId.id);
+  @Get(':id')
+  getWorkoutById(@Param('id') id: string): Promise<Workout> {
+    return this.workoutsService.getWorkoutById(id);
   }
 
-  @GrpcMethod(WORKOUT_SERVICE_NAME, 'findByName')
-  getWorkoutByName(workoutName: WorkoutName): Promise<Workout> {
-    return this.workoutsService.getWorkoutByName(workoutName.name);
+  @Get('name/:name')
+  getWorkoutByName(@Param('name') name: string): Promise<Workout> {
+    return this.workoutsService.getWorkoutByName(name);
   }
 
-  @GrpcMethod(WORKOUT_SERVICE_NAME, 'findByCategory')
-  getWorkoutsByCategory(workoutCategory: WorkoutCategory): Promise<Workouts> {
-    return this.workoutsService.getWorkoutsByCategory(workoutCategory.category);
+  @Get('category/:category')
+  getWorkoutsByCategory(
+    @Param('category') category: string
+  ): Promise<Workouts> {
+    return this.workoutsService.getWorkoutsByCategory(category);
   }
 
-  @GrpcMethod(WORKOUT_SERVICE_NAME, 'findByExerciseId')
-  getWorkoutsByExerciseId(exerciseId: ExerciseId): Promise<Workouts> {
-    return this.workoutsService.getWorkoutsByExerciseId(exerciseId.exerciseId);
-  }
-
-  @GrpcMethod(WORKOUT_SERVICE_NAME, 'deleteById')
-  deleteWorkout(workoutId: WorkoutId): Promise<WorkoutDto> {
-    const deletedWorkout = this.workoutsService.deleteWorkout(workoutId.id);
+  @Delete(':id')
+  deleteWorkout(@Param('id', ParseIntPipe) id: number): Promise<WorkoutDto> {
+    const deletedWorkout = this.workoutsService.deleteWorkout(id);
     return deletedWorkout;
   }
 
-  @GrpcMethod(WORKOUT_SERVICE_NAME, 'put')
-  updateWorkout(workoutRequest: Workout): Promise<Workout> {
-    return this.workoutsService.updateWorkout(
-      workoutRequest.id,
-      workoutRequest
-    );
+  @Put(':id')
+  updateWorkout(
+    @Param('id', ParseIntPipe) id: number,
+    workoutRequest: Workout
+  ): Promise<Workout> {
+    return this.workoutsService.updateWorkout(id, workoutRequest);
   }
 }
