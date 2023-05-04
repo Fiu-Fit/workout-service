@@ -9,7 +9,7 @@ import { WorkoutsModule } from './modules/workout/workouts.module';
     ConfigModule.forRoot(),
     WorkoutsModule,
     ExerciseModule,
-    MongooseModule.forRoot(process.env.MONGODB_URL || ''),
+    MongooseModule.forRoot(process.env.DATABASE_URL || ''),
   ],
   controllers: [],
 })
