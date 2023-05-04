@@ -13,11 +13,10 @@ Seguir [este tutorial](https://www.digitalocean.com/community/tutorials/how-to-i
 
 ### .env
 
-1. Crear un nuevo archivo en la carpeta backend que se llame _.env_ y otro que se llame _.env.test_
-2. Copiar los contenidos del archivo _.env.template_ al archivo que creaste en el paso anterior
-3. En el archivo _.env_ asignar el puerto **5434** para PostgreSQL. Por el otro lado, en el archivo _.env.test_ asignar el puerto **5435** para PostgreSQL. (en DATABASE_URL).
-4. Reemplazar los valores entre "< >" por los que corresponda (espero que hayas guardado ese username y password 👀)
-
+1. Crer un archivo .env y ponerle estas dos variables de entorno
+MONGODB_URL='ver_el_grupo_de_whatsapp'
+PORT=8083
+1. Reemplazar los valores entre "< >" por los que corresponda (espero que hayas guardado ese username y password 👀)
 
 ## ⚡ Quick start
 
