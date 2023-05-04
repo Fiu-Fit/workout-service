@@ -15,9 +15,8 @@ import { Exercise } from './interfaces/exercise.pb';
 export class ExerciseController {
   constructor(private exerciseService: ExerciseService) {}
 
-  @Post('create')
+  @Post()
   createExercise(@Body() newExercise: ExerciseDto): Promise<Exercise> {
-    console.log(newExercise);
     return this.exerciseService.createExercise(newExercise);
   }
 

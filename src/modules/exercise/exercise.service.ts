@@ -11,13 +11,11 @@ export class ExerciseService {
   ) {}
 
   createExercise(exercise: ExerciseDto): Promise<Exercise> {
-    const newExercise = this.exerciseModel.create(exercise);
-    return newExercise;
+    return this.exerciseModel.create(exercise);
   }
 
-  async getExercises(): Promise<Exercise[]> {
-    const exercises = await this.exerciseModel.find();
-    return exercises;
+  getExercises(): Promise<Exercise[]> {
+    return this.exerciseModel.find();
   }
 
   async getExercise(id: string): Promise<Exercise> {

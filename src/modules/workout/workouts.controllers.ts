@@ -20,7 +20,7 @@ export class WorkoutsController {
     return this.workoutsService.getWorkouts();
   }
 
-  @Post('create')
+  @Post()
   createWorkout(@Body() createWorkoutDto: WorkoutDto): Promise<Workout> {
     return this.workoutsService.createWorkout(createWorkoutDto);
   }

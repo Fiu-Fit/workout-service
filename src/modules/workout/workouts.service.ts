@@ -12,13 +12,11 @@ export class WorkoutsService {
   ) {}
 
   createWorkout(newWorkout: WorkoutDto): Promise<Workout> {
-    const createdWorkout = this.workoutModel.create(newWorkout);
-    return createdWorkout;
+    return this.workoutModel.create(newWorkout);
   }
 
-  async getWorkouts(): Promise<Workout[]> {
-    const workouts = await this.workoutModel.find();
-    return workouts;
+  getWorkouts(): Promise<Workout[]> {
+    return this.workoutModel.find();
   }
 
   async getWorkoutById(id: string): Promise<Workout> {
@@ -37,9 +35,8 @@ export class WorkoutsService {
     return workout;
   }
 
-  async getWorkoutsByCategory(category: string): Promise<Workout[]> {
-    const workouts = await this.workoutModel.find({ category });
-    return workouts;
+  getWorkoutsByCategory(category: string): Promise<Workout[]> {
+    return this.workoutModel.find({ category });
   }
 
   async deleteWorkout(id: string): Promise<Workout> {
@@ -50,13 +47,15 @@ export class WorkoutsService {
     return workout;
   }
 
-  async updateWorkout(id: string, workout: Workout): Promise<Workout> {
-    const updatedWorkout = (await this.workoutModel.findByIdAndUpdate(
+  async updateWorkout(id: string, exercise: Workout): Promise<Workout> {
+    const updatedWorkout = await this.workoutModel.findByIdAndUpdate(
       { _id: id },
-      workout,
+      exercise,
       { new: true }
-    )) as Workout;
-
+    );
+    if (!updatedWorkout) {
+      throw new BadRequestException('Exercise not found');
+    }
     return updatedWorkout;
   }
 }
