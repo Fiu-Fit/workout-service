@@ -51,8 +51,8 @@ export class Workout {
   @Prop({ required: true })
   authorId: number;
 
-  @Prop({ required: true })
-  updatedAt: Date;
+  @Prop()
+  updatedAt?: Date;
 
   @Prop()
   completedAt?: Date;

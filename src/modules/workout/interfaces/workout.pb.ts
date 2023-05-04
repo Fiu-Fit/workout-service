@@ -34,7 +34,7 @@ export interface Workout {
   exercises: WorkoutExercise[];
   athleteIds: number[];
   authorId: number;
-  updatedAt: Date;
+  updatedAt?: Date;
   completedAt?: Date;
 }
 

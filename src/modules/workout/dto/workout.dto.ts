@@ -43,7 +43,7 @@ export class WorkoutDto {
   authorId: number;
 
   @IsOptional()
-  updatedAt: Date;
+  updatedAt?: Date;
 
   @IsOptional()
   completedAt?: Date;
