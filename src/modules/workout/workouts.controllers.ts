@@ -51,8 +51,8 @@ export class WorkoutsController {
   @Put(':id')
   updateWorkout(
     @Param('id') id: string,
-    workoutRequest: Workout
+    @Body() workout: Workout
   ): Promise<Workout> {
-    return this.workoutsService.updateWorkout(id, workoutRequest);
+    return this.workoutsService.updateWorkout(id, workout);
   }
 }

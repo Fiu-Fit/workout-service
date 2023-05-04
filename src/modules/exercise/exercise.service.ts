@@ -56,7 +56,8 @@ export class ExerciseService {
     return exercise;
   }
 
-  getExerciseByCategory(category: string): Promise<Exercise[]> {
-    return this.exerciseModel.find({ category });
+  async getExerciseByCategory(category: string): Promise<Exercise[]> {
+    const exercises = await this.exerciseModel.find({ category });
+    return exercises;
   }
 }

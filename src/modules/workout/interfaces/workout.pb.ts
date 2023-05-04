@@ -1,10 +1,22 @@
-export enum Units {
+export enum Unit {
   SECONDS = 0,
-  MINUTES = 1,
-  HOURS = 2,
-  REPETITIONS = 3,
-  METERS = 4,
-  KILOMETERS = 5,
+  REPETITIONS = 1,
+  METERS = 2,
+  UNRECOGNIZED = -1,
+}
+
+export enum Category {
+  LEGS = 0,
+  CHEST = 1,
+  BACK = 2,
+  SHOULDERS = 3,
+  ARMS = 4,
+  CORE = 5,
+  CARDIO = 6,
+  FULLBODY = 7,
+  FREEWEIGHT = 8,
+  STRETCHING = 9,
+  STRENGTH = 10,
   UNRECOGNIZED = -1,
 }
 
@@ -18,16 +30,19 @@ export interface Workout {
   description: string;
   duration: number;
   difficulty: number;
-  category: string;
+  category: Category;
   exercises: WorkoutExercise[];
   athleteIds: number[];
   authorId: number;
+  updatedAt?: Date;
 }
 
 export interface WorkoutExercise {
   exerciseId: string;
-  repetitions: number;
-  units: Units;
+  sets: number;
+  reps: number;
+  weight?: number;
+  unit: Unit; // for reps
 }
 
 export interface Empty {}

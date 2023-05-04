@@ -1,17 +1,8 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { Category, Unit } from '../interfaces/workout.pb';
 
 export type WorkoutDocument = HydratedDocument<Workout>;
-
-enum Units {
-  SECONDS = 0,
-  MINUTES = 1,
-  HOURS = 2,
-  REPETITIONS = 3,
-  METERS = 4,
-  KILOMETERS = 5,
-  UNRECOGNIZED = -1,
-}
 
 @Schema()
 export class WorkoutExercise {
@@ -19,10 +10,16 @@ export class WorkoutExercise {
   exerciseId: string;
 
   @Prop()
-  repetitions: number;
+  sets: number;
 
   @Prop()
-  units: Units;
+  reps: number;
+
+  @Prop()
+  weight?: number;
+
+  @Prop()
+  unit: Unit;
 }
 
 @Schema()
@@ -36,14 +33,14 @@ export class Workout {
   @Prop()
   description: string;
 
-  @Prop()
+  @Prop({ required: true })
   duration: number;
 
   @Prop({ required: true, min: 1, max: 5 })
   difficulty: number;
 
-  @Prop()
-  category: string;
+  @Prop({ required: true })
+  category: Category;
 
   @Prop([WorkoutExercise])
   exercises: WorkoutExercise[];
@@ -51,8 +48,11 @@ export class Workout {
   @Prop([Number])
   athleteIds: number[];
 
-  @Prop()
+  @Prop({ required: true })
   authorId: number;
+
+  @Prop()
+  updatedAt?: Date;
 }
 
 export const WorkoutSchema = SchemaFactory.createForClass(Workout);
