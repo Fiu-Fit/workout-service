@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { Category, Units } from '../interfaces/workout.pb';
+import { Category, Unit } from '../interfaces/workout.pb';
 
 export type WorkoutDocument = HydratedDocument<Workout>;
 
@@ -19,7 +19,7 @@ export class WorkoutExercise {
   weight?: number;
 
   @Prop()
-  units: Units;
+  unit: Unit;
 }
 
 @Schema()

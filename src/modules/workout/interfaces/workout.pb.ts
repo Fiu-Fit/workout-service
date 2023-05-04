@@ -1,4 +1,4 @@
-export enum Units {
+export enum Unit {
   SECONDS = 0,
   REPETITIONS = 1,
   METERS = 2,
@@ -43,7 +43,7 @@ export interface WorkoutExercise {
   sets: number;
   reps: number;
   weight?: number;
-  units: Units; // for reps
+  unit: Unit; // for reps
 }
 
 export interface Empty {}
