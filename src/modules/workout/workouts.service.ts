@@ -41,7 +41,7 @@ export class WorkoutsService {
     return workout;
   }
 
-  async deleteWorkout(id: number): Promise<Workout> {
+  async deleteWorkout(id: string): Promise<Workout> {
     const workout = await this.workoutModel.findByIdAndDelete({ _id: id });
     if (!workout) {
       throw new BadRequestException('Workout not found');
