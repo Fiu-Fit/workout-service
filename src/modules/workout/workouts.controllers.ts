@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { WorkoutDto } from './dto/workout.dto';
 import { Workout } from './interfaces/workout.pb';
@@ -16,8 +17,14 @@ export class WorkoutsController {
   constructor(private workoutsService: WorkoutsService) {}
 
   @Get()
-  getWorkouts(): Promise<Workout[]> {
-    return this.workoutsService.getWorkouts();
+  getWorkouts(
+    @Query('q') q: string,
+    @Query('filters') filters: string
+  ): Promise<Workout[]> {
+    const parsedFilters: Record<string, string> = filters
+      ? JSON.parse(filters)
+      : {};
+    return this.workoutsService.getWorkouts(q, parsedFilters);
   }
 
   @Post()
@@ -28,18 +35,6 @@ export class WorkoutsController {
   @Get(':id')
   getWorkoutById(@Param('id') id: string): Promise<Workout> {
     return this.workoutsService.getWorkoutById(id);
-  }
-
-  @Get('name/:name')
-  getWorkoutByName(@Param('name') name: string): Promise<Workout> {
-    return this.workoutsService.getWorkoutByName(name);
-  }
-
-  @Get('category/:category')
-  getWorkoutsByCategory(
-    @Param('category') category: string
-  ): Promise<Workout[]> {
-    return this.workoutsService.getWorkoutsByCategory(category);
   }
 
   @Delete(':id')

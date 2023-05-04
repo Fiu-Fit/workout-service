@@ -15,8 +15,22 @@ export class WorkoutsService {
     return this.workoutModel.create(newWorkout);
   }
 
-  getWorkouts(): Promise<Workout[]> {
-    return this.workoutModel.find();
+  getWorkouts(
+    q?: string,
+    filters?: Record<
+      string,
+      string | number | [number, number] | { $gte: number; $lte: number }
+    >
+  ): Promise<Workout[]> {
+    if (filters?.difficulty && Array.isArray(filters.difficulty)) {
+      const [lower, upper] = filters.difficulty;
+      filters.difficulty = { $gte: lower, $lte: upper };
+    }
+
+    return this.workoutModel.find({
+      ...(q ? { $text: { $search: q, $caseSensitive: false } } : {}),
+      ...filters,
+    });
   }
 
   async getWorkoutById(id: string): Promise<Workout> {
@@ -25,18 +39,6 @@ export class WorkoutsService {
       throw new BadRequestException('Workout not found');
     }
     return workout;
-  }
-
-  async getWorkoutByName(name: string): Promise<Workout> {
-    const workout = await this.workoutModel.findOne({ name });
-    if (!workout) {
-      throw new BadRequestException('Workout not found');
-    }
-    return workout;
-  }
-
-  getWorkoutsByCategory(category: string): Promise<Workout[]> {
-    return this.workoutModel.find({ category });
   }
 
   async deleteWorkout(id: string): Promise<Workout> {

@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { ExerciseDto } from './dto/exercise.dto';
 import { ExerciseService } from './exercise.service';
@@ -21,8 +22,15 @@ export class ExerciseController {
   }
 
   @Get()
-  getExercises(): Promise<Exercise[]> {
-    return this.exerciseService.getExercises();
+  getExercises(
+    @Query('q') q: string,
+    @Query('filters') filters: string
+  ): Promise<Exercise[]> {
+    const parsedFilters: Record<string, string> = filters
+      ? JSON.parse(filters)
+      : {};
+
+    return this.exerciseService.getExercises(q, parsedFilters);
   }
 
   @Get(':id')
