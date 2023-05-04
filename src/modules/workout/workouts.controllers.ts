@@ -4,7 +4,6 @@ import {
   Delete,
   Get,
   Param,
-  ParseIntPipe,
   Post,
   Put,
 } from '@nestjs/common';
@@ -44,16 +43,16 @@ export class WorkoutsController {
   }
 
   @Delete(':id')
-  deleteWorkout(@Param('id', ParseIntPipe) id: number): Promise<WorkoutDto> {
+  deleteWorkout(@Param('id') id: string): Promise<WorkoutDto> {
     const deletedWorkout = this.workoutsService.deleteWorkout(id);
     return deletedWorkout;
   }
 
   @Put(':id')
   updateWorkout(
-    @Param('id', ParseIntPipe) id: number,
-    workoutRequest: Workout
+    @Param('id') id: string,
+    @Body() workout: Workout
   ): Promise<Workout> {
-    return this.workoutsService.updateWorkout(id, workoutRequest);
+    return this.workoutsService.updateWorkout(id, workout);
   }
 }

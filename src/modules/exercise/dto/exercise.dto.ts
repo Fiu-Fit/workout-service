@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, MaxLength } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsString, MaxLength } from 'class-validator';
 import { Category } from '../../workout/interfaces/workout.pb';
 
 export class ExerciseDto {
@@ -11,6 +11,7 @@ export class ExerciseDto {
   @MaxLength(100)
   description: string;
 
+  @IsEnum(Category)
   @IsNotEmpty()
   category: Category;
 }
