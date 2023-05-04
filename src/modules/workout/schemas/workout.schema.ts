@@ -56,5 +56,6 @@ export class Workout {
 }
 
 export const WorkoutSchema = SchemaFactory.createForClass(Workout)
-  .index({ name: 'text', description: 'text', category: 'text' })
+  .index({ name: 'text', description: 'text' })
+  .index({ category: 1 })
   .index({ difficulty: 1 });

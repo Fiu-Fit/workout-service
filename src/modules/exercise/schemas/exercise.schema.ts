@@ -19,8 +19,9 @@ export class Exercise {
   category: Category;
 }
 
-export const ExerciseSchema = SchemaFactory.createForClass(Exercise).index({
-  name:        'text',
-  description: 'text',
-  category:    'text',
-});
+export const ExerciseSchema = SchemaFactory.createForClass(Exercise)
+  .index({
+    name:        'text',
+    description: 'text',
+  })
+  .index({ category: 1 });
