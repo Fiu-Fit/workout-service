@@ -53,9 +53,6 @@ export class Workout {
 
   @Prop()
   updatedAt?: Date;
-
-  @Prop()
-  completedAt?: Date;
 }
 
 export const WorkoutSchema = SchemaFactory.createForClass(Workout);

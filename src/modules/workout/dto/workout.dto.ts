@@ -46,7 +46,4 @@ export class WorkoutDto {
 
   @IsOptional()
   updatedAt?: Date;
-
-  @IsOptional()
-  completedAt?: Date;
 }
