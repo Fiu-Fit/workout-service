@@ -17,6 +17,9 @@ export class Exercise {
 
   @Prop()
   category: Category;
+
+  @Prop()
+  METValue: number;
 }
 
 export const ExerciseSchema = SchemaFactory.createForClass(Exercise)
