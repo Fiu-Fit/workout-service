@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { ObjectId } from 'mongodb';
 import { Model } from 'mongoose';
 import { WorkoutDto } from './dto/workout.dto';
 import { Workout } from './schemas/workout.schema';
@@ -34,7 +35,51 @@ export class WorkoutsService {
   }
 
   async getWorkoutById(id: string): Promise<Workout> {
-    const workout = await this.workoutModel.findById({ _id: id });
+    const [workout] = await this.workoutModel.aggregate<Workout>([
+      { $match: { _id: new ObjectId(id) } },
+      { $unwind: '$exercises' },
+      {
+        $lookup: {
+          from:         'exercises',
+          localField:   'exercises.exerciseId',
+          foreignField: '_id',
+          as:           'exercises.exercise',
+        },
+      },
+      { $unwind: '$exercises.exercise' },
+      {
+        $group: {
+          _id:       '$_id',
+          exercises: {
+            $push: '$exercises',
+          },
+        },
+      },
+      {
+        $lookup: {
+          from:         'workouts',
+          localField:   '_id',
+          foreignField: '_id',
+          as:           'workoutDetails',
+        },
+      },
+      {
+        $unwind: {
+          path: '$workoutDetails',
+        },
+      },
+      {
+        $addFields: {
+          'workoutDetails.exercises': '$exercises',
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: '$workoutDetails',
+        },
+      },
+    ]);
+
     if (!workout) {
       throw new BadRequestException('Workout not found');
     }
