@@ -1,3 +1,4 @@
+
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ObjectId } from 'mongodb';
@@ -37,7 +38,7 @@ export class WorkoutsService {
   async getWorkoutById(id: string): Promise<Workout> {
     const [workout] = await this.workoutModel.aggregate<Workout>([
       { $match: { _id: new ObjectId(id) } },
-      { $unwind: '$exercises' },
+      { $unwind: { path: '$exercises', preserveNullAndEmptyArrays: true } },
       {
         $lookup: {
           from:         'exercises',
@@ -46,7 +47,13 @@ export class WorkoutsService {
           as:           'exercises.exercise',
         },
       },
-      { $unwind: '$exercises.exercise' },
+      {
+        $unwind: {
+          path:                       '$exercises.exercise',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+
       {
         $group: {
           _id:       '$_id',
@@ -65,7 +72,8 @@ export class WorkoutsService {
       },
       {
         $unwind: {
-          path: '$workoutDetails',
+          path:                       '$workoutDetails',
+          preserveNullAndEmptyArrays: true,
         },
       },
       {
@@ -83,7 +91,12 @@ export class WorkoutsService {
     if (!workout) {
       throw new NotFoundException('Workout not found');
     }
-    return workout;
+    return {
+      ...workout,
+      exercises: workout.exercises.filter(
+        exercise => Object.keys(exercise).length > 0
+      ),
+    };
   }
 
   async deleteWorkout(id: string): Promise<Workout> {
