@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ExerciseDto } from './dto/exercise.dto';
 import { ExerciseService } from './exercise.service';
-import { Exercise } from './interfaces/exercise.pb';
+import { Exercise } from './interfaces/exercise.interface';
 
 @Controller('exercises')
 export class ExerciseController {

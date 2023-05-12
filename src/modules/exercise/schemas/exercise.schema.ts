@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument } from 'mongoose';
-import { Category } from '../../workout/interfaces/workout.pb';
+import { Category } from '../../workout/interfaces/workout.interface';
 
 export type ExerciseDocument = HydratedDocument<Exercise>;
 
