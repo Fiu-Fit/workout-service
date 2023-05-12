@@ -9,7 +9,7 @@ import {
   Query,
 } from '@nestjs/common';
 import { WorkoutDto } from './dto/workout.dto';
-import { Workout } from './interfaces/workout.pb';
+import { Workout } from './interfaces/workout.interface';
 import { WorkoutsService } from './workouts.service';
 
 @Controller('workouts')

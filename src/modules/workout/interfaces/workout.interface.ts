@@ -20,10 +20,6 @@ export enum Category {
   UNRECOGNIZED = -1,
 }
 
-export interface WorkoutId {
-  id: string;
-}
-
 export interface Workout {
   id: string;
   name: string;
@@ -41,12 +37,5 @@ export interface WorkoutExercise {
   exerciseId: string;
   sets: number;
   reps: number;
-  weight?: number;
   unit: Unit; // for reps
-}
-
-export interface Empty {}
-
-export interface ExerciseId {
-  exerciseId: string;
 }

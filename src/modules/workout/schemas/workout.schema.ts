@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { Category, Unit } from '../interfaces/workout.pb';
+import { Category, Unit } from '../interfaces/workout.interface';
 
 export type WorkoutDocument = HydratedDocument<Workout>;
 
