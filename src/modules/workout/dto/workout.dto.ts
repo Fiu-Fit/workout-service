@@ -8,7 +8,7 @@ import {
   MaxLength,
   Min,
 } from 'class-validator';
-import { Category, WorkoutExercise } from '../interfaces/workout.pb';
+import { Category, WorkoutExercise } from '../interfaces/workout.interface';
 
 export class WorkoutDto {
   @IsString()
