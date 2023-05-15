@@ -53,6 +53,9 @@ export class Workout {
 
   @Prop()
   updatedAt?: Date;
+
+  @Prop({ default: false })
+  completed: boolean;
 }
 
 export const WorkoutSchema = SchemaFactory.createForClass(Workout)
