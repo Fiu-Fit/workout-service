@@ -6,7 +6,9 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
+import { GetQueryRatingDto } from './dto/get-query-rating.dto';
 import { RatingDto } from './dto/rating.dto';
 import { Rating } from './interfaces/rating.interface';
 import { RatingService } from './rating.service';
@@ -16,13 +18,13 @@ export class RatingController {
   constructor(private ratingService: RatingService) {}
 
   @Get()
-  getRatings(): Promise<Rating[]> {
-    return this.ratingService.getRatings();
+  getRatings(@Query() filter: GetQueryRatingDto): Promise<Rating[]> {
+    return this.ratingService.getRatings(filter);
   }
 
   @Post()
-  createRating(@Body() createRatingDto: RatingDto): Promise<Rating> {
-    return this.ratingService.createRating(createRatingDto);
+  createRating(@Body() rating: RatingDto): Promise<Rating> {
+    return this.ratingService.createRating(rating);
   }
 
   @Get(':id')

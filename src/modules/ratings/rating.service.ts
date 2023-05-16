@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
+import { GetQueryRatingDto } from './dto/get-query-rating.dto';
 import { RatingDto } from './dto/rating.dto';
 import { Rating } from './schemas/rating.schema';
 
@@ -19,8 +20,12 @@ export class RatingService {
     return this.ratingModel.create(newRating);
   }
 
-  getRatings(): Promise<Rating[]> {
-    return this.ratingModel.find({});
+  getRatings(filter: GetQueryRatingDto): Promise<Rating[]> {
+    return this.ratingModel.find({
+      ...(filter.workoutId ? { workoutId: filter.workoutId } : {}),
+      ...(filter.athleteId ? { athleteId: filter.athleteId } : {}),
+      ...(filter.rating ? { rating: filter.rating } : {}),
+    });
   }
 
   async getRatingById(id: string): Promise<Rating> {
