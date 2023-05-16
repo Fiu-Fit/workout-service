@@ -1,5 +1,4 @@
 import {
-  IsBoolean,
   IsEnum,
   IsNotEmpty,
   IsNumber,
@@ -47,7 +46,4 @@ export class WorkoutDto {
 
   @IsOptional()
   updatedAt?: Date;
-
-  @IsBoolean()
-  completed: boolean = false;
 }

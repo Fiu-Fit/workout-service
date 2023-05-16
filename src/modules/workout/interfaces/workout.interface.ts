@@ -31,7 +31,6 @@ export interface Workout {
   athleteIds: number[];
   authorId: number;
   updatedAt?: Date;
-  completed: boolean;
 }
 
 export interface WorkoutExercise {
