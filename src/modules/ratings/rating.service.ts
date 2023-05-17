@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { sumBy } from 'lodash';
 import { Model } from 'mongoose';
 import { GetQueryRatingDto } from './dto/get-query-rating.dto';
 import { RatingDto } from './dto/rating.dto';
@@ -54,5 +55,13 @@ export class RatingService {
       throw new NotFoundException('Exercise not found');
     }
     return updatedRating;
+  }
+
+  async getAverageRating(workoutId: string): Promise<number> {
+    const ratings = await this.ratingModel.find({ workoutId: workoutId });
+    if (!ratings) {
+      throw new BadRequestException('No ratings found');
+    }
+    return Math.round(sumBy(ratings, 'rating') / ratings.length);
   }
 }
