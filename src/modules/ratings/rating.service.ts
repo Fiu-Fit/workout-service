@@ -6,7 +6,6 @@ import {
 import { InjectModel } from '@nestjs/mongoose';
 import { sumBy } from 'lodash';
 import { Model } from 'mongoose';
-import { GetQueryRatingDto } from './dto/get-query-rating.dto';
 import { RatingDto } from './dto/rating.dto';
 import { Rating } from './schemas/rating.schema';
 
@@ -21,11 +20,19 @@ export class RatingService {
     return this.ratingModel.create(newRating);
   }
 
-  getRatings(filter: GetQueryRatingDto): Promise<Rating[]> {
+  getRatings(
+    filters?: Record<
+      string,
+      string | number | [number, number] | { $gte: number; $lte: number }
+    >
+  ): Promise<Rating[]> {
+    if (filters?.rating && Array.isArray(filters.rating)) {
+      const [lower, upper] = filters.rating;
+      filters.rating = { $gte: lower, $lte: upper };
+    }
+
     return this.ratingModel.find({
-      ...(filter.workoutId ? { workoutId: filter.workoutId } : {}),
-      ...(filter.athleteId ? { athleteId: filter.athleteId } : {}),
-      ...(filter.rating ? { rating: filter.rating } : {}),
+      ...filters,
     });
   }
 
@@ -58,7 +65,7 @@ export class RatingService {
   }
 
   async getAverageRating(workoutId: string): Promise<number> {
-    const ratings = await this.ratingModel.find({ workoutId: workoutId });
+    const ratings = await this.ratingModel.find({ workoutId });
     if (!ratings) {
       throw new BadRequestException('No ratings found');
     }

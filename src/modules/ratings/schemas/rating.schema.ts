@@ -22,6 +22,6 @@ export class Rating {
 }
 
 export const RatingSchema = SchemaFactory.createForClass(Rating)
-  .index({ workoutId: 1 })
+  .index({ comment: 'text' })
   .index({ athleteId: 1 })
   .index({ rating: 1 });
