@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { ObjectId } from 'mongodb';
 import { Model } from 'mongoose';
+import { RatingService } from '../ratings/rating.service';
 import { WorkoutDto } from './dto/workout.dto';
 import { Workout } from './schemas/workout.schema';
 
@@ -9,7 +10,8 @@ import { Workout } from './schemas/workout.schema';
 export class WorkoutsService {
   constructor(
     @InjectModel(Workout.name)
-    private workoutModel: Model<Workout>
+    private workoutModel: Model<Workout>,
+    private ratingService: RatingService
   ) {}
 
   createWorkout(newWorkout: WorkoutDto): Promise<Workout> {
@@ -90,11 +92,13 @@ export class WorkoutsService {
     if (!workout) {
       throw new NotFoundException('Workout not found');
     }
+
     return {
       ...workout,
       exercises: workout.exercises.filter(
         exercise => Object.keys(exercise).length > 0
       ),
+      averageRating: await this.ratingService.getAverageRating(id),
     };
   }
 

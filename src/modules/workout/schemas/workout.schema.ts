@@ -52,6 +52,9 @@ export class Workout {
   authorId: number;
 
   @Prop()
+  averageRating?: number;
+
+  @Prop()
   updatedAt?: Date;
 }
 

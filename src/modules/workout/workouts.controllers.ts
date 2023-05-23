@@ -38,7 +38,7 @@ export class WorkoutsController {
   }
 
   @Delete(':id')
-  deleteWorkout(@Param('id') id: string): Promise<WorkoutDto> {
+  deleteWorkout(@Param('id') id: string): Promise<Workout> {
     const deletedWorkout = this.workoutsService.deleteWorkout(id);
     return deletedWorkout;
   }
